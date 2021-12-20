@@ -1,4 +1,4 @@
-const planetsList = require("../models/planets.model") ;
+const {planetsList}= require("../models/planets.model") ;
 
 function getPlanets(req, res) {
     // get planets list from model and returns it
