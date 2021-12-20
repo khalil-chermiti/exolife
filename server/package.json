@@ -1,11 +1,16 @@
 {
   "name": "exolife",
   "version": "1.0.0",
-  "description": "",
+  "description": "exolife backend",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "csv-parse": "^5.0.3",
+    "express": "^4.17.2"
+  }
 }
