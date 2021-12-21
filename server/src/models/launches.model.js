@@ -6,14 +6,18 @@ const launch = {
     mission : 'Kepler Exploration X',
     rocket : 'Explorer ISI',
     launchDate: new Date('December 27,2030'),
-    destination: 'Kepler--442 b',
+    target: 'Kepler--442 b',
     customer: ['ZTM' , 'NASA'] ,
     upcoming: true ,
     success: true ,
 };
 
-lauches.set(lauch.flight , launch );
+launches.set(launch.flightNumber , launch );
 
+// returning launches list in array format 
+function getLaunchesList () {
+    return Array.from(launches.values()) ;
+}
 module.exports = {
-    launches ,
+    getLaunchesList ,
 }

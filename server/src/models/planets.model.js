@@ -30,8 +30,10 @@ function getPlanetsList() {
             .on('end' , () => {resolve()}) ;
     })
 }
-
+function getPlanets () {
+    return results
+}
 module.exports = {
     getPlanetsList,
-    planetsList : results ,
+    getPlanets,
 }
