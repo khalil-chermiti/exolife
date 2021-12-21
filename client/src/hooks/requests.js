@@ -1,8 +1,7 @@
 // Load planets and return as JSON.
 async function httpGetPlanets() {
-  let res = await fetch("http://localhost:8000") ;
-  let data =await res.json();
-  return data ;
+  let res = await fetch("http://localhost:8000/planets") ;
+  return await res.json();
 }
 
 async function httpGetLaunches() {

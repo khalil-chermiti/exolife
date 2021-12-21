@@ -25,7 +25,7 @@ function getPlanetsList() {
             // when we get data chunk check if planet is habitable 
             .on('data' , (data) => {if (isHabitable(data)) results.push(data) ;})
             // handling error
-            .on('error' , (err) => {reject(err)}) 
+            .on('error' , (err) => {reject('there was an error processing planets list')}) 
             // when the stream end
             .on('end' , () => {resolve()}) ;
     })

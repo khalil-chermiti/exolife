@@ -12,7 +12,11 @@ const server = http.createServer(app) ;
 async function startServer() {
 
     // get planets list ready 
-    await getPlanetsList() ;
+    try {
+        await getPlanetsList() ;
+    } catch(err) {
+        alert('there was a problem loading planets list')
+    }
 
     // start listening 
     server.listen(PORT) ;

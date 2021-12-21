@@ -1,17 +1,22 @@
 const express = require("express") ;
+const path = require("path");
+const morgan = require("morgan") ;
 const cors = require("cors") ;
 const {planetsRoute} = require("./routes/planets.route") ;
 
-// middlewares 
 const app = express() ;
+
+// middlewares 
 app.use(cors({origin : "http://localhost:3000"}));
+
+app.use(morgan('tiny'));
+// parse into json 
 app.use(express.json());
 
-
-
 // routing 
-app.use('/' , planetsRoute) ;
-app.use('/planets' , planetsRoute) ;
+app.use(express.static(path.join(__dirname , '..' , 'public'))) ;
+app.use(planetsRoute) ;
+app.get('/' , (req ,res) => res.sendFile(path.join(__dirname , '..' , 'public' , 'index.html'))) ;
 
 
 module.exports = app ;
