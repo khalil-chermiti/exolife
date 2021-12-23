@@ -1,10 +1,12 @@
-const {getLaunchesList , addNewLaunch} = require("../../models/launches.model");
+const {getLaunchesList , addNewLaunch , launchExists , abortLaunch} = require("../../models/launches.model");
 
 // get launches and return them in the response 
 function httpGetLaunches (req , res) {
     return res.status(200).json(getLaunchesList()) ;
 }
 
+
+// add a new launch 
 function httpAddLaunch (req , res ) {
 
     // get request body
@@ -40,7 +42,23 @@ function httpAddLaunch (req , res ) {
 
 }
 
+
+// abort launch 
+function httpAbortLaunch(req , res) {
+
+    let abortId = Number(req.params.id) ;
+
+    // check if launch id exists
+    if (!launchExists(abortId)) {
+        return res.status(404).json({error : "launch doesn't exist"}) ;
+    }
+
+    // abort the launch 
+    const aborted = abortLaunch(abortId);
+    res.status(200).json(aborted) ;
+}
 module.exports ={
     httpGetLaunches ,
     httpAddLaunch ,
+    httpAbortLaunch ,
 }
