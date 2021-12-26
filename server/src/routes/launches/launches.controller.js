@@ -20,14 +20,14 @@ function httpAddLaunch (req , res ) {
       !launch.target
     ) {
         return res.status(400).json({
-            "error" : "missing mission informations"
+            error : "missing mission informations"
         }
         ) ;
     }
     // check for valid date
     if(isNaN(new Date(launch.launchDate))) {
         return res.status(400).json( {
-            "error" : "invalid date"
+            error : "invalid date"
         }
         ) ;
     }
