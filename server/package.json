@@ -6,7 +6,8 @@
   "scripts": {
     "test": "jest --watch",
     "start": "PORT=8000 node src/server.js",
-    "watch": "PORT=8000 nodemon src/server.js"
+    "watch": "PORT=8000 nodemon src/server.js",
+    "cluster": "PORT=8000 pm2 start src/server.js -i max"
   },
   "author": "",
   "license": "ISC",
@@ -14,6 +15,7 @@
     "cors": "^2.8.5",
     "csv-parse": "^5.0.3",
     "express": "^4.17.2",
+    "mongoose": "^6.1.4",
     "morgan": "^1.10.0"
   },
   "devDependencies": {

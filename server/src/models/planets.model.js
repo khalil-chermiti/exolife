@@ -2,6 +2,9 @@ const {parse} = require('csv-parse') ;
 const fs = require('fs') ;
 const path = require("path"); 
 
+// TODO 
+const planets = require("./planets.model") ;
+
 // planets list 
 const results = [] ;
 
