@@ -1,3 +1,4 @@
+const launchesDB = require('./launches.mongo') ;
 const launches = new Map();
 
 // our only lauch mission for the moment XD
@@ -16,8 +17,18 @@ const launch = {
 
 launches.set(launch.flightNumber , launch );
 
-// check if launch exists 
+saveLaunch(launch) ;
 
+// inserting the saved launch into DB (upsert)
+async function saveLaunch(launch) {
+    await launchesDB.updateOne(
+        {flightNumber : launch.flightNumber} , 
+        launch , 
+        {upsert : true}
+    )
+}
+
+// check if launch exists 
 function launchExists(id) {
     return launches.has(id) ;
 } 
@@ -49,9 +60,11 @@ function abortLaunch(launchId) {
 } 
 
 // returning launches list in array format 
-function getLaunchesList () {
-    return Array.from(launches.values()) ;
-}
+async function getLaunchesList(){
+    return await launchesDB.find({} , {_id : 0 , __v : 0});
+} 
+
+
 module.exports = {
     getLaunchesList ,
     addNewLaunch ,
