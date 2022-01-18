@@ -44,18 +44,28 @@ async function httpAddLaunch (req , res ) {
 
 
 // ! abort launch 
-function httpAbortLaunch(req , res) {
+async function httpAbortLaunch(req , res) {
 
     let abortId = Number(req.params.id) ;
-
+    const foundLaunch = await launchExists(abortId) ;
+    
     // check if launch id exists
-    if (!launchExists(abortId)) {
+    if (!foundLaunch) {
         return res.status(404).json({error : "launch doesn't exist"}) ;
     }
 
     // abort the launch 
     const aborted = abortLaunch(abortId);
-    res.status(200).json(aborted) ;
+
+    if (!aborted) {
+        return res.status(400).json({
+            error: "could not abort mission" 
+        })
+    }
+
+    res.status(200).json({
+        aborted : true
+    }) ;
 }
 module.exports ={
     httpGetLaunches ,

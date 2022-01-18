@@ -1,10 +1,6 @@
 const launchesDB = require('./launches.mongo') ;
-const launches = new Map();
-
-
-const DEFAULT_FLIGHT_NUMBER = 100 ;
-
-const launch = {
+/* launch object example
+launch = {
     flightNumber : 100 ,
     mission : 'Kepler Exploration X',
     rocket : 'Explorer ISI',
@@ -14,12 +10,35 @@ const launch = {
     upcoming: true ,
     success: true ,
 };
+*/
 
-launches.set(launch.flightNumber , launch );
+const DEFAULT_FLIGHT_NUMBER = 100 ;
 
-saveLaunch(launch) ;
+// returning launches list in array format 
+async function getLaunchesList(){
+    return await launchesDB.find({} , {_id : 0 , __v : 0});
+} 
 
-// ! inserting the saved launch into DB (upsert)
+// ! check if launch exists 
+async function launchExists(id) {
+    return launchesDB.findOne({
+        flightNumber : id
+    });
+} 
+
+async function getLatestFlightNumber() {
+    const latestFlight = await launchesDB
+        .findOne({})
+        .sort('-flightNumber');
+    
+    if(!latestFlight) {
+        return DEFAULT_FLIGHT_NUMBER ;
+    }
+
+    return latestFlight.flightNumber ;
+}
+
+// ! insert new launch to DB
 async function saveLaunch(launch) {
     await launchesDB.findOneAndUpdate(
         {flightNumber : launch.flightNumber} , 
@@ -27,11 +46,6 @@ async function saveLaunch(launch) {
         {upsert : true}
     );
 }
-
-// ! check if launch exists 
-function launchExists(id) {
-    return launches.has(id) ;
-} 
 
 // ! schedule new launch (adding)
 async function ScheduleNewLaunch(launch) {
@@ -49,32 +63,21 @@ async function ScheduleNewLaunch(launch) {
 }
 
 // aborting launch function 
-function abortLaunch(launchId) {
-    const aborted = launches.get(launchId) ;
-    aborted.upcoming = false ;
-    aborted.success = false ;
+async function abortLaunch(launchId) {
 
-    return aborted ;
+    // update launch
+    const updateOBJ = await launchesDB.updateOne({
+        flightNumber : launchId 
+    } ,
+    {
+        success : false ,
+        upcoming : false
+    }) ;
+
+    // return true on success 
+    return updateOBJ.ok === 1 && updateOBJ.nModified === 1 ;
 } 
  
-async function getLatestFlightNumber() {
-    const latestFlight = await launchesDB
-        .findOne({})
-        .sort('-flightNumber');
-    
-    if(!latestFlight) {
-        return DEFAULT_FLIGHT_NUMBER ;
-    }
-
-    return latestFlight.flightNumber ;
-}
-
-// returning launches list in array format 
-async function getLaunchesList(){
-    return await launchesDB.find({} , {_id : 0 , __v : 0});
-} 
-
-
 module.exports = {
     getLaunchesList ,
     ScheduleNewLaunch,
