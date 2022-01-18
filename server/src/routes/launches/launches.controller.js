@@ -1,13 +1,13 @@
-const {getLaunchesList , addNewLaunch , launchExists , abortLaunch} = require("../../models/launches.model");
+const {getLaunchesList , launchExists , abortLaunch, ScheduleNewLaunch} = require("../../models/launches.model");
 
-// get launches and return them in the response 
+// ! get launches  
 async function httpGetLaunches (req , res) {
     return res.status(200).json(await getLaunchesList()) ;
 }
 
 
-// add a new launch 
-function httpAddLaunch (req , res ) {
+// ! add a new launch 
+async function httpAddLaunch (req , res ) {
 
     // get request body
     let launch = req.body ;
@@ -35,7 +35,7 @@ function httpAddLaunch (req , res ) {
     launch.launchDate = new Date(launch.launchDate);
 
     // create the new launch 
-    addNewLaunch(launch) ;
+    await ScheduleNewLaunch(launch) ;
 
     // resturn a creation success code ; 
     return res.status(201).json(launch);
@@ -43,7 +43,7 @@ function httpAddLaunch (req , res ) {
 }
 
 
-// abort launch 
+// ! abort launch 
 function httpAbortLaunch(req , res) {
 
     let abortId = Number(req.params.id) ;

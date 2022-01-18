@@ -1,8 +1,8 @@
 const launchesDB = require('./launches.mongo') ;
 const launches = new Map();
 
-// our only lauch mission for the moment XD
-let latestFlightNumber = 100 ;
+
+const DEFAULT_FLIGHT_NUMBER = 100 ;
 
 const launch = {
     flightNumber : 100 ,
@@ -19,36 +19,34 @@ launches.set(launch.flightNumber , launch );
 
 saveLaunch(launch) ;
 
-// inserting the saved launch into DB (upsert)
+// ! inserting the saved launch into DB (upsert)
 async function saveLaunch(launch) {
-    await launchesDB.updateOne(
+    await launchesDB.findOneAndUpdate(
         {flightNumber : launch.flightNumber} , 
         launch , 
         {upsert : true}
-    )
+    );
 }
 
-// check if launch exists 
+// ! check if launch exists 
 function launchExists(id) {
     return launches.has(id) ;
 } 
 
-//create launches function 
-function addNewLaunch(launch) {
-    // inc flightNumber ;
-    latestFlightNumber++;
+// ! schedule new launch (adding)
+async function ScheduleNewLaunch(launch) {
 
-    // add new lanch to the launches object(map)
-    launches.set(
-    latestFlightNumber,
-    Object.assign(launch, { 
-        customer: ['ZTM' , 'NASA'] ,
+    const flightNumber = await getLatestFlightNumber() + 1 ;
+
+    const newLaunch = Object.assign(launch , {
+        success :true ,
         upcoming: true ,
-        success: true ,
-        flightNumber: latestFlightNumber 
-    })
-    );
-} 
+        customers : ['ZTM' , 'NASA'],
+        flightNumber , 
+    });
+
+    await saveLaunch(newLaunch) ;
+}
 
 // aborting launch function 
 function abortLaunch(launchId) {
@@ -58,6 +56,18 @@ function abortLaunch(launchId) {
 
     return aborted ;
 } 
+ 
+async function getLatestFlightNumber() {
+    const latestFlight = await launchesDB
+        .findOne({})
+        .sort('-flightNumber');
+    
+    if(!latestFlight) {
+        return DEFAULT_FLIGHT_NUMBER ;
+    }
+
+    return latestFlight.flightNumber ;
+}
 
 // returning launches list in array format 
 async function getLaunchesList(){
@@ -67,7 +77,7 @@ async function getLaunchesList(){
 
 module.exports = {
     getLaunchesList ,
-    addNewLaunch ,
+    ScheduleNewLaunch,
     launchExists ,
     abortLaunch ,
 }
