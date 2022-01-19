@@ -19,9 +19,9 @@ app.use(express.json());
 
 // mounting the react app 
 app.use(express.static(path.join(__dirname , '..' , 'public'))) ;
-app.get('/*' , (req ,res) => res.sendFile(path.join(__dirname , '..' , 'public' , 'index.html'))) ;
-
 // API V1  
 app.use('/v1' , api);
+app.get('/*' , (req ,res) => res.sendFile(path.join(__dirname , '..' , 'public' , 'index.html'))) ;
+
 
 module.exports = app ;
