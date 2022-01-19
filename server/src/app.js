@@ -19,8 +19,10 @@ app.use(express.json());
 
 // mounting the react app 
 app.use(express.static(path.join(__dirname , '..' , 'public'))) ;
+
 // API V1  
 app.use('/v1' , api);
+
 app.get('/*' , (req ,res) => res.sendFile(path.join(__dirname , '..' , 'public' , 'index.html'))) ;
 
 
