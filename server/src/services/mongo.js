@@ -13,7 +13,7 @@ async function mongoDisconnect() {
 	await mongoose.disconnect(Db_URL);
 }
 
-mongoose.connection.once('open' , () => console.log('conncted to the database'));
+mongoose.connection.once('open' , () => console.log('connected to the database'));
 mongoose.connection.once('error' , () => console.error('error connecting to the DB')) ;
 
 module.exports = {
