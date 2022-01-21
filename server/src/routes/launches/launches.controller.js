@@ -1,8 +1,14 @@
 const {getLaunchesList , launchExists , abortLaunch, ScheduleNewLaunch} = require("../../models/launches.model");
-
+const {getPagination} = require('../../services/pagination') ;
 // ! get launches  
 async function httpGetLaunches (req , res) {
-    return res.status(200).json(await getLaunchesList()) ;
+
+    // get pagination options 
+    const {skip , limit} = getPagination(req.query) ;
+
+    const launches = await getLaunchesList(skip , limit);
+
+    return res.status(200).json(launches) ;
 }
 
 

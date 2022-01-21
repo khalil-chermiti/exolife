@@ -112,8 +112,12 @@ async function launchExists(id) {
 
 
 // returning launches list in array format 
-async function getLaunchesList(){
-    return await launchesDB.find({} , {_id : 0 , __v : 0});
+async function getLaunchesList(skip , limit){
+    return await launchesDB
+        .find({} , {_id : 0 , __v : 0})
+        .sort({flightNumber : 1})
+        .skip(skip)
+        .limit(limit);
 } 
 
 async function getLatestFlightNumber() {
