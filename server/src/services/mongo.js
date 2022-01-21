@@ -1,16 +1,13 @@
 const mongoose = require("mongoose");
 
-// database url 
-const Db_URL = "mongodb+srv://khalil:nourhenismyone@nasacluster.qvujp.mongodb.net/nasa?retryWrites=true&w=majority";
-
 // connecting to the DB
-async function mongoConnect() {
-	await mongoose.connect(Db_URL);
+async function mongoConnect(DB_URL) {
+	await mongoose.connect(DB_URL);
 }
 
 // disconnect from DB  
-async function mongoDisconnect() {
-	await mongoose.disconnect(Db_URL);
+async function mongoDisconnect(DB_URL) {
+	await mongoose.disconnect(DB_URL);
 }
 
 mongoose.connection.once('open' , () => console.log('connected to the database'));

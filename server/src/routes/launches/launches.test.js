@@ -2,17 +2,20 @@ const request = require("supertest") ;
 const app = require("../../app");
 const {mongoConnect , mongoDisconnect } = require("../../services/mongo");
 
+require('dotenv').config();
+
+const MONGO_URL = process.env.MONGO_DB;
 
 describe('launches API' , () => {
 
     // connecting to mongoDB
     beforeAll(async () => {
-        await mongoConnect();
+        await mongoConnect(MONGO_URL);
     });
 
     // disconnect from DB 
     afterAll(async () => {
-        await mongoDisconnect();
+        await mongoDisconnect(MONGO_URL);
     })
 
     // using supertest and jest for testing 
